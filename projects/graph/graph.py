@@ -96,15 +96,19 @@ class Graph:
 
         This should be done using recursion.
         """
+        # add current vert to visited set
         visited.add(starting_vertex)
 #        print("startvert: ", starting_vertex)
+        # print current vertex
         print(starting_vertex)
-
+        # process neighboring vertices
         for neighbor in self.get_neighbors(starting_vertex):
             #            print(neighbor)
+            # base case, do nothing if we've seen this vertex
             if neighbor in visited:
                 return
             else:
+                # otherwise, process this vertex
                 self.dft_recursive(neighbor, visited)
 
     def bfs(self, starting_vertex, destination_vertex):
@@ -179,7 +183,7 @@ class Graph:
                         path_copy.append(edge)
                         s.push(path_copy)
 
-    def dfs_recursive(self, starting_vertex, destination_vertex):
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=set(), path=[]):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -187,7 +191,19 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+
+        temp_path = path.copy()
+        temp_path.append(starting_vertex)
+        if starting_vertex not in visited:
+            visited.add(starting_vertex)
+            if starting_vertex == destination_vertex:
+                return temp_path
+            else:
+                for neighbor in self.get_neighbors(starting_vertex):
+                    next_path = self.dfs_recursive(
+                        neighbor, destination_vertex, visited, temp_path)
+                    if next_path is not None:
+                        return next_path
 
 
 if __name__ == '__main__':
