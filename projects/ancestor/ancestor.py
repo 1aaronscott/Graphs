@@ -13,33 +13,26 @@ def earliest_ancestor(ancestors, starting_node):
     g = Graph()
 
     for tup in ancestors:
-        #        print("t ", tup)
-        #        vert.append(tup)
         parent = tup[0]
-#        print(parent)
         child = tup[1]
-#        print(child)
         g.add_vertex(parent)
-#        print("add parent: ", g.vertices)
         g.add_vertex(child)
-#        print("add child ", g.vertices)
-#    for tup in ancestors:
         g.add_edge(child, parent)
-#        print("added edge ", g.vertices)
-#    print(g.vertices)
+
+    # hold all the paths we find
     paths = []
-#    print(set(vert))
     for vertex in vert:
         if vertex != starting_node and g.dfs(starting_node, vertex):
             paths.append(g.dfs(starting_node, vertex))
-    if len(paths) < 1:
+    if len(paths) < 1:  # no paths were found
         return -1
     else:
+        # sort all the paths and return the last value
         return max(paths, key=len)[-1]
-#    print(paths)
 
 
 if __name__ == '__main__':
     ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
-                 (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
-    print(earliest_ancestor(ancestors, 6))
+                 #                 (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
+                 (11, 5), (11, 8), (8, 9), (4, 8), (10, 1)]
+    print(earliest_ancestor(ancestors, 9))
