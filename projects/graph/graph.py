@@ -15,7 +15,8 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        self.vertices[vertex_id] = set()  # set of edges from this vert
+        if vertex_id not in self.vertices:  # to make sure existing vertext isn't overwrote
+            self.vertices[vertex_id] = set()  # set of edges from this vert
 
     def add_edge(self, v1, v2):
         """
