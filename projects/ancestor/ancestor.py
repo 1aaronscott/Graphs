@@ -1,7 +1,6 @@
 ''' Find the earliest ancestor of a node '''
-
-# change for magit
+from graph import Graph
 
 
 def earliest_ancestor(ancestors, starting_node):
-    pass
+    g = Graph()
