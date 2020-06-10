@@ -22,6 +22,7 @@ def earliest_ancestor(ancestors, starting_node):
     # hold all the paths we find
     paths = []
     for vertex in vert:
+        # if we're not at start node and a path exists, add the path
         if vertex != starting_node and g.dfs(starting_node, vertex):
             paths.append(g.dfs(starting_node, vertex))
     if len(paths) < 1:  # no paths were found
