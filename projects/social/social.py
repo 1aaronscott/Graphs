@@ -1,8 +1,18 @@
+''' create a class that finds extended friendships in a social network '''
+import random
+from util import Queue
+
+
 class User:
+    ''' user class defining the names of social network users '''
+
     def __init__(self, name):
         self.name = name
 
+
 class SocialGraph:
+    ''' implment a social network as a graph '''
+
     def __init__(self):
         self.last_id = 0
         self.users = {}
@@ -37,16 +47,38 @@ class SocialGraph:
         between those users.
 
         The number of users must be greater than the average number of friendships.
+        Code provided by instructor.
         """
         # Reset graph
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
-
         # Add users
+        for i in range(0, num_users):
+            self.add_user(f"User {i}")
 
-        # Create friendships
+        # Create Frienships
+        # Generate all possible friendship combinations
+        possible_friendships = []
+
+        # Avoid duplicates by ensuring the first number is smaller than the second
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                possible_friendships.append((user_id, friend_id))
+
+        # Shuffle the possible friendships
+        random.shuffle(possible_friendships)
+
+        # Create friendships for the first X pairs of the list
+        # X is determined by the formula: num_users * avg_friendships // 2
+        # Need to divide by 2 since each add_friendship() creates 2 friendships
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
+
+    def get_friends(self, user_id):
+        ''' return the number of friends user_id has '''
+        return self.friendships[user_id]
 
     def get_all_social_paths(self, user_id):
         """
@@ -56,9 +88,35 @@ class SocialGraph:
         extended network with the shortest friendship path between them.
 
         The key is the friend's ID and the value is the path.
+
+        Implemented as a bfs since we want shortest paths.
         """
+
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        # instantiate the queue
+        q = Queue()
+
+        # intialize the path list and put it on the queue
+        # per rubric, path consisting of only the user is valid
+        path = [user_id]
+        q.enqueue(path)
+
+        # while the queue is not empty
+        while q.size() > 0:
+            # get the first path from the queue
+            cur_path = q.dequeue()
+            # and its last entry
+            new_user_id = cur_path[-1]
+            # search paths of unvisited users
+            if new_user_id not in visited:
+                visited[new_user_id] = cur_path
+
+                friends = self.get_friends(new_user_id)
+                for friend in friends:
+                    path_copy = list(cur_path)
+                    path_copy.append(friend)
+                    q.enqueue(path_copy)
+
         return visited
 
 
